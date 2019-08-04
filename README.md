@@ -25,6 +25,10 @@ Run `docker-compose up -d --build`
 
 Code away.  You'll find the laravel install in the `laravel-app` folder.
 
+Your app will be available at http://127.0.0.1:80
+
+Adminer will be available at http://127.0.0.1:8080
+
 ### Common tasks
 
 How do I run `artisan` commands?
