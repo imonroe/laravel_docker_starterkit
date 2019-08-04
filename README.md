@@ -13,6 +13,7 @@ This started life as an example app for [CapRover](https://github.com/caprover/c
 - a basic package.lock file supporting the default laravel `webpack.mix.js` configuration.
 - a basic `captain-definition` file for CapRover deployments
 - a modified docker file which will do a `composer install` and a `npm run dev` as part of the build process.
+- Adminer, for doing any manual database stuff you may need.
 
 ## How do I use it?
 
