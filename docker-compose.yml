@@ -29,19 +29,6 @@ services:
       - project_mysql
     networks:
       - project-network
-  project_phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: project_phpmyadmin
-    ports:
-      - 8182:80
-    environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=project_mysql
-    restart: always
-    depends_on:
-      - project_mysql
-    networks:
-      - project-network
   project_mysql:
     image: mysql:5.7.22
     container_name: project_mysql
@@ -67,6 +54,17 @@ services:
       - 8080:8080
     networks:
       - project-network
+  project_portainer:
+    image: portainer/portainer
+    restart: always
+    command: --templates http://templates/templates.json
+    ports:
+      - "9000:9000"
+    volumes:
+      - \\.\pipe\docker_engine:\\.\pipe\docker_engine
+      - ./portainer/data:/data
+    environment:
+      - TZ="America/Denver"
 networks:
   project-network:
     driver: bridge

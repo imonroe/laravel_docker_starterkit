@@ -8,6 +8,9 @@ RUN chmod +x /docker-entry.sh
 # Set working directory
 WORKDIR /var/www
 
+# set up environment variables
+RUN echo "NODE_ENV=development" >> /etc/environment
+
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -20,11 +23,17 @@ RUN apt-get update && apt-get install -y \
     zip \
     jpegoptim optipng pngquant gifsicle \
     vim \
+    nano \
     unzip \
-    git \
     git \
     curl \
     nginx
+
+# install nodejs
+RUN curl sL https://deb.nodesource.com/setup_10.x | bash
+RUN apt-get install --yes nodejs
+RUN node -v
+RUN npm -v
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -55,7 +64,11 @@ RUN cat /usr/local/etc/php/conf.d/local.ini
 RUN rm -rf /etc/nginx/sites-enabled
 RUN mkdir -p /etc/nginx/sites-enabled
 
+# Build the application
 RUN chmod -R 777 /var/www/storage
+RUN composer install
+RUN npm install
+RUN npm run dev
 RUN php artisan cache:clear
 
 
