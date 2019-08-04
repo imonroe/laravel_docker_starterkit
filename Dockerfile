@@ -69,8 +69,8 @@ RUN chmod -R 777 /var/www/storage
 RUN composer install
 RUN npm install
 RUN npm run dev
+RUN php artisan migrate
 RUN php artisan cache:clear
-
 
 # Expose port 80 and start php-fpm server
 EXPOSE 80
