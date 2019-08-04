@@ -14,7 +14,25 @@ This started life as an example app for [CapRover](https://github.com/caprover/c
 - a basic `captain-definition` file for CapRover deployments
 - a modified docker file which will do a `composer install` and a `npm run dev` as part of the build process.
 
+## How do I use it?
 
-IMPORTANT:
+Make sure you have Docker installed and working for your system.
 
+Clone this repo to a convenient directory
+
+Run `docker-compose up -d --build`
+
+Code away.  You'll find the laravel install in the `laravel-app` folder.
+
+### Common tasks
+
+How do I run `artisan` commands?
+- If you're on windows, run `larabash.bat`.  That'll get you into a bash shell, and you can run `php artisan whatever...` just like normal.
+- If you're on a unix-like system, just run `docker-compose exec project_laravel bash`, where `project_laravel` is the name of the laravel container.
+
+How do I run `npm install`, etc.?
+- See above to get into bash, then just run the commands as normal.
+
+
+#### IMPORTANT:
 Note that the build process for laravel projects are quite heavy, you need at least 2GB, or in some instances 4gb of RAM or your server might crash.
