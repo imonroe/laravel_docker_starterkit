@@ -6,7 +6,7 @@ services:
     restart: always
     volumes:
       - ./application:/var/www
-      - ./configuration/nginx/conf.d/:/etc/nginx/conf.d/
+      - confd:/etc/nginx/conf.d/
     ports:
       - 80:80
       - 443:443
@@ -22,9 +22,22 @@ services:
       - mysql
     container_name: ${COMPOSE_PROJECT_NAME}_laravel
     command: ["/wait-for-it.sh", "${COMPOSE_PROJECT_NAME}_mysql:3306", "--", "/docker-entry.sh"]
+    environment:
+      - PROJECT_WEBSERVER=${COMPOSE_PROJECT_NAME}_laravel
+      - NODE_ENV=development
+      - DB_CONNECTION=mysql
+      - DB_HOST=${COMPOSE_PROJECT_NAME}_mysql
+      - DB_PORT=${MASTER_DB_PORT}
+      - DB_DATABASE=${MASTER_DB_DATABASE}
+      - DB_USERNAME=${MASTER_DB_USERNAME}
+      - DB_PASSWORD=${MASTER_DB_PASSWORD}
+      - REDIS_HOST=${COMPOSE_PROJECT_NAME}_redis
+      - REDIS_PASSWORD=${MASTER_REDIS_PASSWORD}
+      - REDIS_PORT=${MASTER_REDIS_PORT}
     volumes:
       - ./application:/var/www
       - ./configuration/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - confd:/etc/nginx/conf.d/
     links:
       - mysql
     networks:
@@ -36,10 +49,10 @@ services:
     # expose:
     #   - 3306
     environment:
-      - MYSQL_DATABASE=homestead
-      - MYSQL_ROOT_PASSWORD=Pro@123
-      - MYSQL_USER=homestead
-      - MYSQL_PASSWORD=secret
+      - MYSQL_DATABASE=${MASTER_DB_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MASTER_MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MASTER_DB_USERNAME}
+      - MYSQL_PASSWORD=${MASTER_DB_PASSWORD}
     ports:
       - 3306:3306
     volumes:
@@ -64,6 +77,8 @@ services:
       - 6379
     networks:
       - network
+volumes:
+  confd:
 networks:
   network:
     driver: bridge
