@@ -1,7 +1,6 @@
 FROM php:7.2-fpm
 
 # Copy composer.lock and composer.json
-COPY ./application/composer.lock ./application/composer.json /var/www/
 COPY wait-for-it.sh /
 COPY docker-entry.sh /
 
