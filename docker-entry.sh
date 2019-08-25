@@ -8,7 +8,7 @@ else
 FIRST_RUN=false
 fi
 
-if [ $FIRST_RUN = true]; then
+if [ $FIRST_RUN = true ]; then
 echo Setting up the nginx host file.
 sed -i "s/__CONTAINER_NAME__/$PROJECT_WEBSERVER/g" /etc/nginx/conf.d/app.conf
 echo Host file updated.
@@ -19,7 +19,7 @@ composer install
 echo Completed Composer install.
 
 echo Checking out the environment.
-if [ $FIRST_RUN = true]; then
+if [ $FIRST_RUN = true ]; then
 # we are running this app for the first time.
 echo This is a first run, so we will create the environment file.
 cp /var/www/.env.example /var/www/.env
