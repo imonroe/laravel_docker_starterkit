@@ -29,7 +29,7 @@ To be the name of your new app.
 
 Run `docker-compose up -d --build`
 
-On my test system, it takes about x minutes to build the stack the first time.  Subsequent builds will be faster, because caching.
+On my test system, it takes about 15 minutes to build the stack the first time.  Subsequent builds will be faster, because caching.
 
 Code away.  You'll find the laravel install in the `laravel-app` folder.
 
