@@ -1,9 +1,11 @@
 FROM php:7.2-fpm
 
 # Copy composer.lock and composer.json
-COPY ./laravel-app/composer.lock ./laravel-app/composer.json /var/www/
+COPY ./application/composer.lock ./application/composer.json /var/www/
 COPY docker-entry.sh /
-RUN chmod +x /docker-entry.sh
+COPY firstrun.sh /
+COPY wait-for-it.sh /
+
 
 # Set working directory
 WORKDIR /var/www
@@ -27,7 +29,11 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl \
+    dos2unix \
     nginx
+
+# fix scripts
+RUN dos2unix /*.sh && chmod +x /docker-entry.sh && chmod +x /firstrun.sh && chmod +x /wait-for-it.sh
 
 # install nodejs
 RUN curl sL https://deb.nodesource.com/setup_10.x | bash
@@ -51,11 +57,12 @@ RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy existing application directory
-COPY ./laravel-app /var/www/
+COPY ./application /var/www/
 RUN ls /var/www
 
 COPY ./configuration/nginx/conf.d/ /etc/nginx/conf.d/
 RUN ls /etc/nginx/conf.d
+RUN perl -pi -w -e "s/__CONTAINER_NAME__/${COMPOSE_PROJECT_NAME}_webserver/g" /etc/nginx/conf.d/app.conf
 
 COPY ./configuration/php/local.ini /usr/local/etc/php/conf.d/local.ini
 RUN ls /usr/local/etc/php/conf.d
@@ -66,11 +73,9 @@ RUN mkdir -p /etc/nginx/sites-enabled
 
 # Build the application
 RUN chmod -R 777 /var/www/storage
-RUN composer install
-RUN npm install
-RUN npm run dev
-RUN php artisan migrate
-RUN php artisan cache:clear
+
+# set up an environment file if it's necessary
+RUN /firstrun.sh
 
 # Expose port 80 and start php-fpm server
 EXPOSE 80

@@ -1,1 +1,1 @@
-docker-compose exec project_laravel bash
+docker-compose exec ${COMPOSE_PROJECT_NAME}_laravel bash

@@ -1,37 +1,37 @@
-version: "3.5"
+version: "3.7"
 services:
-  project_webserver:
+  webserver:
     image: nginx
-    container_name: project_webserver
+    container_name: ${COMPOSE_PROJECT_NAME}_webserver
     restart: always
     volumes:
-      - ./laravel-app:/var/www
+      - ./application:/var/www
       - ./configuration/nginx/conf.d/:/etc/nginx/conf.d/
-    # volumes_from:
-    #   - project_laravel
     ports:
       - 80:80
       - 443:443
     networks:
-      - project-network
+      - network
     links:
-      - project_laravel
-  project_laravel:
+      - laravel
+  laravel:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: project_laravel
-    # image: digitalocean.com/php
+    depends_on:
+      - mysql
+    container_name: ${COMPOSE_PROJECT_NAME}_laravel
+    command: ["/wait-for-it.sh", "${COMPOSE_PROJECT_NAME}_mysql:3306", "--", "/docker-entry.sh"]
     volumes:
-      - ./laravel-app:/var/www
+      - ./application:/var/www
       - ./configuration/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     links:
-      - project_mysql
+      - mysql
     networks:
-      - project-network
-  project_mysql:
+      - network
+  mysql:
     image: mysql:5.7.22
-    container_name: project_mysql
+    container_name: ${COMPOSE_PROJECT_NAME}_mysql
     restart: always
     # expose:
     #   - 3306
@@ -43,21 +43,27 @@ services:
     ports:
       - 3306:3306
     volumes:
+      - ./configuration/mysql/low-memory-my.cnf:/etc/mysql/my.cnf
       - ./dbdata/mysql:/var/lib/mysql
     networks:
-      - project-network
-  project_adminer:
+      - network
+  adminer:
     image: adminer
-    container_name: project_adminer
+    container_name: ${COMPOSE_PROJECT_NAME}_adminer
     restart: always
     ports:
       - 8080:8080
     networks:
-      - project-network
+      - network
+  redis:
+    image: redis
+    container_name: ${COMPOSE_PROJECT_NAME}_redis_cache
+    environment:
+      - ALLOW_EMPTY_PASSWORDS=yes
+    expose:
+      - 6379
+    networks:
+      - network
 networks:
-  project-network:
+  network:
     driver: bridge
-# #Volumes
-#   volumes:
-#     dbdata:
-#       driver: local
