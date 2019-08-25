@@ -41,7 +41,7 @@ Adminer will be available at http://127.0.0.1:8080
 
 How do I run `artisan` commands?
 - If you're on windows, run `larabash.bat`.  That'll get you into a bash shell, and you can run `php artisan whatever...` just like normal.
-- If you're on a unix-like system, just run `docker-compose exec project_laravel bash`, where `project_laravel` is the name of the laravel container.
+- If you're on a unix-like system, just run `docker-compose exec laravel bash`.
 
 How do I run `npm install`, etc.?
 - See above to get into bash, then just run the commands as normal.
