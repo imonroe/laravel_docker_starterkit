@@ -24,7 +24,11 @@ if [ $FIRST_RUN = true ]; then
 echo This is a first run, so we will create the environment file.
 cp /var/www/.env.example /var/www/.env
 cd /var/www
+echo Generating application key.
 php artisan key:generate
+echo Setting up cron.
+crontab -l | { cat; echo "* * * * * cd /var/www && php artisan schedule:run >> /dev/null 2>&1"; } | crontab -
+echo Crontab added.
 fi
 echo Finished checking out the environment.
 
