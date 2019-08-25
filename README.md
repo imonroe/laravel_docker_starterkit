@@ -21,7 +21,15 @@ Make sure you have Docker installed and working for your system.
 
 Clone this repo to a convenient directory
 
+Edit the `.env` file in the root of the repo.  Edit this line:
+```
+COMPOSE_PROJECT_NAME=test_app
+```
+To be the name of your new app.
+
 Run `docker-compose up -d --build`
+
+On my test system, it takes about x minutes to build the stack the first time.  Subsequent builds will be faster, because caching.
 
 Code away.  You'll find the laravel install in the `laravel-app` folder.
 
