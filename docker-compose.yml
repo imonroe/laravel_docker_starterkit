@@ -25,7 +25,9 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_laravel
     command: ["/wait-for-it.sh", "${COMPOSE_PROJECT_NAME}_mysql:3306", "--", "/docker-entry.sh"]
     environment:
+      - APP_NAME=${COMPOSE_PROJECT_NAME}
       - PROJECT_WEBSERVER=${COMPOSE_PROJECT_NAME}_laravel
+      - APP_ENV=local
       - NODE_ENV=development
       - DB_CONNECTION=mysql
       - DB_HOST=${COMPOSE_PROJECT_NAME}_mysql
