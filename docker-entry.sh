@@ -27,6 +27,7 @@ cd /var/www
 echo Generating application key.
 php artisan key:generate
 echo Setting up cron.
+touch /etc/crontab /etc/cron.*/*
 crontab -l | { cat; echo "* * * * * cd /var/www && php artisan schedule:run >> /dev/null 2>&1"; } | crontab -
 echo Crontab added.
 fi

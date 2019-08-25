@@ -1,6 +1,6 @@
 FROM php:7.2-fpm
 
-# Copy composer.lock and composer.json
+# Copy in our helper scripts
 COPY wait-for-it.sh /
 COPY docker-entry.sh /
 
@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     dos2unix \
+    cron \
     nginx
 
 # fix scripts
@@ -47,13 +48,10 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Add user for laravel application
 RUN groupadd -g 1000 www && useradd -u 1000 -ms /bin/bash -g www www
 
-# Copy existing application directory
+# Copy existing application directory and supporting files.
 COPY ./application /var/www/
-
 COPY ./configuration/nginx/conf.d/ /etc/nginx/conf.d/
-
 COPY ./configuration/php/local.ini /usr/local/etc/php/conf.d/local.ini
-RUN cat /usr/local/etc/php/conf.d/local.ini
 
 RUN rm -rf /etc/nginx/sites-enabled && mkdir -p /etc/nginx/sites-enabled && chmod -R 777 /var/www/storage
 
