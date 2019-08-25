@@ -31,7 +31,7 @@ Run `docker-compose up -d --build`
 
 On my test system, it takes about 15 minutes to build the stack the first time.  Subsequent builds will be faster, because caching.
 
-Code away.  You'll find the laravel install in the `laravel-app` folder.
+Code away.  You'll find the laravel install in the `application` folder.
 
 Your app will be available at http://127.0.0.1:80
 
