@@ -8,12 +8,6 @@ else
 FIRST_RUN=false
 fi
 
-if [ $FIRST_RUN = true ]; then
-echo Setting up the nginx host file.
-sed -i "s/__CONTAINER_NAME__/$PROJECT_WEBSERVER/g" /etc/nginx/conf.d/app.conf
-echo Host file updated.
-fi
-
 echo Installing Composer dependencies.
 composer install
 echo Completed Composer install.
@@ -50,5 +44,6 @@ php artisan cache:clear
 echo Laravel cache cleared.
 
 echo Preflight completed. Have fun!
-service php-fpm start
-service nginx start
+php-fpm -D -R
+/usr/sbin/nginx -g "daemon off;"
+

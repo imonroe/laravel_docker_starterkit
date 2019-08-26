@@ -1,9 +1,5 @@
 FROM php:7.2-fpm
 
-# Copy in our helper scripts
-COPY wait-for-it.sh /
-COPY docker-entry.sh /
-
 # Set working directory
 WORKDIR /var/www
 
@@ -27,9 +23,6 @@ RUN apt-get update && apt-get install -y \
     cron \
     procps \
     nginx
-
-# fix scripts
-RUN dos2unix /*.sh && chmod +x /docker-entry.sh && chmod +x /wait-for-it.sh
 
 # install nodejs
 RUN curl sL https://deb.nodesource.com/setup_10.x | bash
@@ -55,6 +48,16 @@ COPY ./configuration/nginx/conf.d/ /etc/nginx/conf.d/
 COPY ./configuration/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
 RUN rm -rf /etc/nginx/sites-enabled && mkdir -p /etc/nginx/sites-enabled && chmod -R 777 /var/www/storage
+
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+  && ln -sf /dev/stderr /var/log/nginx/error.log
+
+# Copy in our helper scripts
+COPY wait-for-it.sh /
+COPY docker-entry.sh /
+
+# fix scripts
+RUN dos2unix /*.sh && chmod +x /docker-entry.sh && chmod +x /wait-for-it.sh
 
 # Expose port 80 and start php-fpm server
 EXPOSE 80

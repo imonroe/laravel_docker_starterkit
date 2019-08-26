@@ -1,21 +1,5 @@
 version: "3.7"
 services:
-  webserver:
-    image: nginx
-    container_name: ${COMPOSE_PROJECT_NAME}_webserver
-    restart: always
-    volumes:
-      - ./application:/var/www
-      - confd:/etc/nginx/conf.d/
-    ports:
-      - 80:80
-      - 443:443
-    depends_on:
-      - laravel
-    networks:
-      - network
-    links:
-      - laravel
   laravel:
     build:
       context: .
@@ -24,9 +8,11 @@ services:
       - mysql
     container_name: ${COMPOSE_PROJECT_NAME}_laravel
     command: ["/wait-for-it.sh", "${COMPOSE_PROJECT_NAME}_mysql:3306", "--", "/docker-entry.sh"]
+    ports:
+      - 80:80
+      - 443:443
     environment:
       - APP_NAME=${COMPOSE_PROJECT_NAME}
-      - PROJECT_WEBSERVER=${COMPOSE_PROJECT_NAME}_laravel
       - APP_ENV=local
       - NODE_ENV=development
       - DB_CONNECTION=mysql
