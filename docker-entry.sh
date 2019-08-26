@@ -50,4 +50,4 @@ php artisan cache:clear
 echo Laravel cache cleared.
 
 echo Preflight completed. Have fun!
-php-fpm && /usr/sbin/nginx -g "daemon off;"
+php-fpm

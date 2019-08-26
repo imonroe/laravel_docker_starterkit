@@ -56,6 +56,12 @@ COPY ./configuration/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
 RUN rm -rf /etc/nginx/sites-enabled && mkdir -p /etc/nginx/sites-enabled && chmod -R 777 /var/www/storage
 
+# build the application
+
+RUN /docker-entry.sh
+
 # Expose port 80 and start php-fpm server
 EXPOSE 80
-CMD ["/docker-entry.sh"]
+
+CMD ["nginx", "-g", "daemon off;"]
+
