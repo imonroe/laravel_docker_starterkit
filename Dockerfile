@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     dos2unix \
     cron \
-    ps \
+    procps \
     nginx
 
 # fix scripts
