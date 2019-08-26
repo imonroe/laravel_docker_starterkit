@@ -50,4 +50,5 @@ php artisan cache:clear
 echo Laravel cache cleared.
 
 echo Preflight completed. Have fun!
-php-fpm
+service php-fpm start
+service nginx start
