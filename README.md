@@ -4,8 +4,8 @@ This started life as an example app for [CapRover](https://github.com/caprover/c
 
 ## What's included?
 
-- Laravel 5.8.x
-- the basic Laravel auth scaffolding
+- Laravel 6.2.x
+- the basic Laravel auth scaffolding with Vue.JS components
 - mysql 5.7.22
 - nginx
 - a helper file for windows, `larabash.bat`, which launches you a nice bash window in the laravel container for things like `artisan` commands.
@@ -29,7 +29,7 @@ To be the name of your new app.
 
 Run `docker-compose up -d --build`
 
-On my test system, it takes about 15 minutes to build the stack the first time.  Subsequent builds will be faster, because caching.
+On my test system, it takes about 15-30 minutes to build the stack the first time.  Subsequent builds will be faster, because caching.
 
 Code away.  You'll find the laravel install in the `application` folder.
 
