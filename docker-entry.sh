@@ -28,7 +28,6 @@ php artisan key:generate
 echo Setting up UI dependencies and basic scaffolding
 php artisan ui bootstrap
 php artisan ui vue
-php artisan ui bootstrap --auth
 php artisan ui vue --auth
 
 echo Setting up cron.
