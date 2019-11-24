@@ -3,6 +3,10 @@ FROM php:7.2-fpm
 # Set working directory
 WORKDIR /var/www
 
+#create volumes
+VOLUME /var/www/vendor
+VOLUME /var/www/node_modules
+
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -42,15 +46,17 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Add user for laravel application
 RUN groupadd -g 1000 www && useradd -u 1000 -ms /bin/bash -g www www
 
+RUN rm -rf /etc/nginx/sites-enabled && mkdir -p /etc/nginx/sites-enabled
+
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+  && ln -sf /dev/stderr /var/log/nginx/error.log
+
 # Copy existing application directory and supporting files.
 COPY ./application /var/www/
 COPY ./configuration/nginx/conf.d/ /etc/nginx/conf.d/
 COPY ./configuration/php/local.ini /usr/local/etc/php/conf.d/local.ini
-
-RUN rm -rf /etc/nginx/sites-enabled && mkdir -p /etc/nginx/sites-enabled && chmod -R 777 /var/www/storage
-
-RUN ln -sf /dev/stdout /var/log/nginx/access.log \
-  && ln -sf /dev/stderr /var/log/nginx/error.log
+RUN chmod -R 777 /var/www/storage
+RUN composer install
 
 # Copy in our helper scripts
 COPY wait-for-it.sh /

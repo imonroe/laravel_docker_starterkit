@@ -8,10 +8,9 @@ else
 FIRST_RUN=false
 fi
 
-if [ $FIRST_RUN = true ]; then
+if [ $FIRST_RUN = true ] && [ "$APP_ENV" != "production" ]; then
 
 echo Installing Composer dependencies.
-composer install
 composer require laravel/ui --dev
 composer require barryvdh/laravel-debugbar --dev
 composer require predis/predis
@@ -19,16 +18,19 @@ composer require jeroen-g/laravel-packager --dev
 composer require squizlabs/php_codesniffer --dev
 echo Completed Composer install.
 
+echo Setting up UI dependencies and basic scaffolding
+php artisan ui bootstrap
+php artisan ui vue --auth
+
+fi
+
+if [ $FIRST_RUN = true ]; then
 echo This is a first run, so we will create the environment file and download dependencies.
 cp /var/www/.env.example /var/www/.env
 cd /var/www
 echo Generating application key.
 php artisan key:generate
-
-echo Setting up UI dependencies and basic scaffolding
-php artisan ui bootstrap
-php artisan ui vue
-php artisan ui vue --auth
+fi
 
 echo Setting up cron.
 touch /etc/crontab /etc/cron.*/*
@@ -40,15 +42,22 @@ npm install
 echo Finished installing node dependencies.
 
 echo Running Webpack build process.
+if [ "$APP_ENV" == "production" ]; then
+npm run prod
+else
 npm run dev
-echo Webpack build complete.
-
 fi
+echo Webpack build complete.
 
 echo Checking composer.lock changes
 composer install
+if [ "$APP_ENV" == "production" ]; then
+composer install --no-dev
+else
+composer install
+fi
 echo Migrating database schema.
-php artisan migrate
+php artisan migrate --force
 echo Database schema migrations complete.
 
 echo Clearing the Laravel cache.
