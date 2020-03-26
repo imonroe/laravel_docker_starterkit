@@ -4,8 +4,8 @@ This started life as an example app for [CapRover](https://github.com/caprover/c
 
 ## What's included?
 
-- Laravel 6.2.x
-- the basic Laravel auth scaffolding with Vue.JS components
+- Laravel 7.x
+- the basic Laravel auth scaffolding with Vue.JS components, using `laravel/ui`
 - mysql 5.7.22
 - nginx
 - a helper file for windows, `larabash.bat`, which launches you a nice bash window in the laravel container for things like `artisan` commands.
