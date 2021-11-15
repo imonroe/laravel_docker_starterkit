@@ -31,6 +31,8 @@ Run `docker-compose up -d --build`
 
 On my test system, it takes about 15-30 minutes to build the stack the first time.  Subsequent builds will be faster, because caching.
 
+Run: `docker exec project_laravel chmod -R 775 /var/www/storage/logs && docker exec project_laravel chmod -R 775 /var/www/storage/framework`  That will set permissions for your application correctly.
+
 Code away.  You'll find the laravel install in the `application` folder.
 
 Your app will be available at http://127.0.0.1:80
@@ -40,7 +42,7 @@ Adminer will be available at http://127.0.0.1:8080
 ### Common tasks
 
 How do I run `artisan` commands?
-- If you're on windows, run `larabash.bat`.  That'll get you into a bash shell, and you can run `php artisan whatever...` just like normal.
+- If you're on windows (like powershell), run `larabash.bat`.  That'll get you into a bash shell, and you can run `php artisan whatever...` just like normal.
 - If you're on a unix-like system, just run `docker exec -ti project_laravel bash`.
 
 How do I run `npm install`, etc.?
